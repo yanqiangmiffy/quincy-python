@@ -1,0 +1,22 @@
+提取目标：人物名字
+提取的对象：满足以下三个条件之一的单词序列 "W1 W2 W3"
+	(1)以一个姓氏开头
+	(2)以两个姓氏开头
+	(3)以音译人物名称开头
+提取所依赖的特征：
+	1、单词特征（单词序列的开始和结束标志）、
+	2、局部上下文特征（出现在单词序列的前面或者后面频率最高的三个单词包括动词）
+		-----形式：feature-name   		value
+				   1th-Next-Word-XX      1（代表出现在单词序列的前后）
+				   2th...
+				   3th...
+	3、单词依赖特征（主谓宾、定状补）
+
+(使用稀疏矩阵存储)
+
+
+中文信息学报
+ACL https://www.aclweb.org/portal/
+计算语言学（computational linguistics，CL）          http://www.mitpressjournals.org/loi/coli
+
+
