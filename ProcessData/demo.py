@@ -1,4 +1,5 @@
 import os
+import re
 class ProcessData:
     def __init__(self):
         self.input_path='data/news.txt'
@@ -63,22 +64,42 @@ class ProcessData:
     def write_data(self):
         normData=self.get_normData()
         for data in normData:
+            # sentence=data[0].replace(" ",'')
             sentence=data[0]
             keywords=data[1]
+            print(keywords)
             for keyword in keywords:
-                if keyword in sentence:
-                    sentence=sentence.replace(keyword,'')
+                temp=sentence.split(keyword)
+                split_op=" "+keyword+" "
+                sentence=split_op.join(temp)
+            final_data=re.findall(r"\w+",sentence)
             with open(self.output_path,'a',encoding='utf-8') as result:
-                for keyword in keywords:
-                    for index in range(len(keyword)):
-                        if index==0:
-                            result.write(keyword[index]+' '+'B-ORG')
-                        elif index !=0:
-                            result.write(keyword[index]+' '+'I-ORG')
-                        result.write('\n')
-                for word in sentence:
-                    result.write(word+' '+'O')
-                    result.write('\n')
+                for word in final_data:
+                    if word in keywords:
+                        for index in range(len(word)):
+                            if index==0:
+                                result.write(word[index]+' '+'B-ORG')
+                            elif index!=0:
+                                result.write(word[index]+' '+'I-ORG')
+                                result.write('\n')
+                    elif word not in keywords:
+                            for index in range(len(word)):
+                                result.write(word[index]+' '+'O')
+                                result.write('\n')
+
+            #     if keyword in sentence:
+            #         sentence=sentence.replace(keyword,'')
+            # with open(self.output_path,'a',encoding='utf-8') as result:
+            #     for keyword in keywords:
+            #         for index in range(len(keyword)):
+            #             if index==0:
+            #                 result.write(keyword[index]+' '+'B-ORG')
+            #             elif index !=0:
+            #                 result.write(keyword[index]+' '+'I-ORG')
+            #             result.write('\n')
+            #     for word in sentence:
+            #         result.write(word+' '+'O')
+            #         result.write('\n')
 if __name__ == '__main__':
     proData=ProcessData()
     print("***正在写入数据。。。。")
