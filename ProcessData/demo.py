@@ -3,7 +3,8 @@ import re
 class ProcessData:
     def __init__(self):
         self.input_path='data/news.txt'
-        self.output_path='data/result.txt'
+        self.output_LabelPath='data/result-label.txt'
+        self.output_SplitPath='data/result-split.txt'
         self.lines=self.get_lines()
     #获取所有行，用‘\t’分割数据
     def get_lines(self):
@@ -67,18 +68,19 @@ class ProcessData:
             # sentence=data[0].replace(" ",'')
             sentence=data[0]
             keywords=data[1]
-            print(keywords)
+            #print(keywords)
             for keyword in keywords:
                 temp=sentence.split(keyword)
                 split_op=" "+keyword+" "
                 sentence=split_op.join(temp)
             final_data=re.findall(r"\w+",sentence)
-            with open(self.output_path,'a',encoding='utf-8') as result:
+            with open(self.output_LabelPath,'a',encoding='utf-8') as result:
                 for word in final_data:
                     if word in keywords:
                         for index in range(len(word)):
                             if index==0:
                                 result.write(word[index]+' '+'B-ORG')
+                                result.write('\n')
                             elif index!=0:
                                 result.write(word[index]+' '+'I-ORG')
                                 result.write('\n')
@@ -86,7 +88,11 @@ class ProcessData:
                             for index in range(len(word)):
                                 result.write(word[index]+' '+'O')
                                 result.write('\n')
-
+            #过滤标点符号和空格
+            nor_sentence=''.join(final_data)
+            with open(self.output_SplitPath,'a',encoding='utf-8') as split_result:
+                for word in nor_sentence:
+                    split_result.write(word+' ');
             #     if keyword in sentence:
             #         sentence=sentence.replace(keyword,'')
             # with open(self.output_path,'a',encoding='utf-8') as result:
@@ -103,8 +109,11 @@ class ProcessData:
 if __name__ == '__main__':
     proData=ProcessData()
     print("***正在写入数据。。。。")
-    if 'result.txt' in os.listdir('data'):
-        print("***result.txt已经存在，将会被删除")
-        os.remove('data/result.txt')
+    if 'result-label.txt' in os.listdir('data'):
+        print("***result-label.txt已经存在，将会被删除")
+        os.remove('data/result-label.txt')
+    if 'result-split.txt' in os.listdir('data'):
+        print("***result-split.txt已经存在，将会被删除")
+        os.remove('data/result-split.txt')
     proData.write_data()
     print("***保存数据完毕")
