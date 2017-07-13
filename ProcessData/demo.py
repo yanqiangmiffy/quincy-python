@@ -1,19 +1,29 @@
-import os
+﻿import os
 import re
 class ProcessData:
     def __init__(self):
-        self.input_path='data/news.txt'
+        self.input_path='data/corpus'
         self.output_LabelPath='data/result-label.txt'
         self.output_SplitPath='data/result-split.txt'
         self.lines=self.get_lines()
+    def get_paths(self):
+        file_names=os.listdir(self.input_path)
+        print(file_names)
+        full_paths=[]
+        for file_name in file_names:
+            full_path=os.path.join(self.input_path+'/',file_name)
+            full_paths.append(full_path)
+        return full_paths
     #获取所有行，用‘\t’分割数据
     def get_lines(self):
+        full_paths=self.get_paths()
         lines=[]
-        with open(self.input_path, 'r', encoding='utf-8') as news:
-            for line in news:
-                raw_line=line.split('\t')
-                lines.append(raw_line)
-        return lines
+        for full_path in full_paths:
+            with open(full_path, 'r', encoding='utf-8') as news:
+                for line in news:
+                    raw_line=line.split('\t')
+                    lines.append(raw_line)
+            return lines
     #获取新闻
     def get_sentences(self):
         sentences=[]
@@ -70,9 +80,10 @@ class ProcessData:
             keywords=data[1]
             #print(keywords)
             for keyword in keywords:
-                temp=sentence.split(keyword)
-                split_op=" "+keyword+" "
-                sentence=split_op.join(temp)
+                if  keyword:
+                    temp=sentence.split(keyword)
+                    split_op=" "+keyword+" "
+                    sentence=split_op.join(temp)
             final_data=re.findall(r"\w+",sentence)
             with open(self.output_LabelPath,'a',encoding='utf-8') as result:
                 for word in final_data:
@@ -108,6 +119,7 @@ class ProcessData:
             #         result.write('\n')
 if __name__ == '__main__':
     proData=ProcessData()
+    proData.get_paths()
     print("***正在写入数据。。。。")
     if 'result-label.txt' in os.listdir('data'):
         print("***result-label.txt已经存在，将会被删除")
