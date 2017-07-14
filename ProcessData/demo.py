@@ -6,6 +6,7 @@ class ProcessData:
         self.output_LabelPath='data/result-label.txt'
         self.output_SplitPath='data/result-split.txt'
         self.lines=self.get_lines()
+    #获取data/corpus路径下所有语料文件
     def get_paths(self):
         file_names=os.listdir(self.input_path)
         print(file_names)
@@ -75,12 +76,12 @@ class ProcessData:
     def write_data(self):
         normData=self.get_normData()
         for data in normData:
-            # sentence=data[0].replace(" ",'')
-            sentence=data[0]
+            sentence=data[0].replace(" ",'')
+            # sentence=data[0]
             keywords=data[1]
             #print(keywords)
             for keyword in keywords:
-                if  keyword:
+                if keyword:
                     temp=sentence.split(keyword)
                     split_op=" "+keyword+" "
                     sentence=split_op.join(temp)
@@ -121,9 +122,11 @@ if __name__ == '__main__':
     proData=ProcessData()
     proData.get_paths()
     print("***正在写入数据。。。。")
+    #result-label.txt  用于保存标签数据
     if 'result-label.txt' in os.listdir('data'):
         print("***result-label.txt已经存在，将会被删除")
         os.remove('data/result-label.txt')
+    #result-split.txt  用于保存单字数据
     if 'result-split.txt' in os.listdir('data'):
         print("***result-split.txt已经存在，将会被删除")
         os.remove('data/result-split.txt')
