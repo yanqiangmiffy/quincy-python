@@ -85,7 +85,9 @@ class ProcessData:
                     temp=sentence.split(keyword)
                     split_op=" "+keyword+" "
                     sentence=split_op.join(temp)
-            final_data=re.findall(r"\w+",sentence)
+            # final_data=re.findall(r"\w+",sentence)
+            final_data=sentence.split(' ')
+
             with open(self.output_LabelPath,'a',encoding='utf-8') as result:
                 for word in final_data:
                     if word in keywords:
@@ -101,10 +103,11 @@ class ProcessData:
                                 result.write(word[index]+' '+'O')
                                 result.write('\n')
             #过滤标点符号和空格
-            nor_sentence=''.join(final_data)
+            # nor_sentence=''.join(final_data)
             with open(self.output_SplitPath,'a',encoding='utf-8') as split_result:
-                for word in nor_sentence:
-                    split_result.write(word+' ');
+                for word in sentence:
+                    if word!=' ':
+                        split_result.write(word+' ');
             #     if keyword in sentence:
             #         sentence=sentence.replace(keyword,'')
             # with open(self.output_path,'a',encoding='utf-8') as result:
