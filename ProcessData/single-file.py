@@ -3,11 +3,13 @@ import time
 def split_word(input_file, output_path):
     with open(input_file, 'r', encoding='utf-8') as input_file:
         for line in input_file:
-            final_data=re.findall(r"\w+",line)
-            sentence=''.join(final_data)
+            # final_data=re.findall(r"\w+",line)
+            # sentence=''.join(final_data)
+            x=line.strip()
             with open(output_path,'a',encoding='utf-8') as file:
-                for word in sentence:
-                    file.write(word+' ')
+                for word in line:
+                    if word!=' ':
+                        file.write(word+' ')
 if __name__ == '__main__':
     input_path='data/single/全量文本 - 计算机行业.txt'
     output_path='data/single/result-split.txt'
